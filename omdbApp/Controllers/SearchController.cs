@@ -34,9 +34,9 @@ namespace omdbApp.Controllers
 
         // POST: api/Search
         [HttpPost]
-        public string Post([FromBody] Search value)
+        public void Post([FromBody] Search value)
         {
-            return omdbData.search(value);
+            omdbData.search(value);
         }
 
         // PUT: api/Search/5

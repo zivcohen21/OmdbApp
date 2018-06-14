@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace omdbApp.Models
 {
-    public class ResponseData
+    public class ResponseData : MediaItem
     {
         public List<MediaItem> Search { get; set; }
-        public MediaItem result { get; set; }
         public int totalResults { get; set; }
         public bool Response { get; set; }
 

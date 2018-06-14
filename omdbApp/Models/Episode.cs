@@ -8,6 +8,6 @@ namespace omdbApp.Models
     public class Episode
     {
         public string Title { get; set; }
-        public string ReleaseDate { get; set; }
+        public string Released { get; set; }
     }
 }
