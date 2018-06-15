@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using omdbApp.Models;
 
 namespace omdbApp.Models
 {
-    public class Movie : MediaItem
+    public class TQuerySeason
     {
-        public string FullPlot { get; set; }
+        public string Title { get; set; }
+        public List<Episode> Episodes { get; set; }
     }
 }
