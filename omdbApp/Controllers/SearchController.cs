@@ -34,9 +34,9 @@ namespace omdbApp.Controllers
 
         // POST: api/Search
         [HttpPost]
-        public void Post([FromBody] Search value)
+        public IEnumerable<MediaItem> Post([FromBody] Search value)
         {
-            omdbData.search(value);
+            return omdbData.search(value);
         }
 
         // PUT: api/Search/5

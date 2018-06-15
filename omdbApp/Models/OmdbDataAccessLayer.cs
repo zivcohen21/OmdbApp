@@ -15,6 +15,7 @@ namespace omdbApp.Models
         private static string dataApi = "http://www.omdbapi.com/?";
         private static string searchKey = "s=";
         private static string titleKey = "t=";
+        private static string idKey = "i=";
         private static string pageKey = "&page=";
         private static string fullPlotKey = "&plot=full";
         private static string seasonKey = "&Season=";
@@ -33,37 +34,54 @@ namespace omdbApp.Models
         //s page: 10 each page: title year type poster
 
 
-        public void search(Search search)
+        public List<MediaItem> search(Search search)
         {
             string term = search.search;
 
-            MediaItem mediaItem = new MediaItem();
-
+            List<MediaItem> mediaItems = new List<MediaItem>();
             string sQueryUrl = dataApi + searchKey + term + apiKey;
             SQuery sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
-            int numOfPages = (sQuery.totalResults % 10) + 1;
+            int numOfPages = (sQuery.totalResults / 10) + 1;
             List<SQueryInner> items = sQuery.Search;
-            getAllDataOfItemPerPage(items);
-
-            for(int i = 2; i <= numOfPages; i++)
+            if (items != null)
             {
-                sQueryUrl = dataApi + searchKey + term + pageKey + i + apiKey;
-                sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
-                items = sQuery.Search;
-                getAllDataOfItemPerPage(items);
+                getAllDataOfItemPerPage(items, mediaItems);
+
+                //for(int i = 2; i <= numOfPages; i++)
+                //{
+                //    sQueryUrl = dataApi + searchKey + term + pageKey + i + apiKey;
+                //    sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
+                //    items = sQuery.Search;
+                //    getAllDataOfItemPerPage(items, mediaItems);
+                //}
             }
+            return mediaItems;
         }
 
-        private void getAllDataOfItemPerPage(List<SQueryInner> items)
+        private void getAllDataOfItemPerPage(List<SQueryInner> items, List<MediaItem> mediaItems)
         {        
             for (int i = 0; i < items.Count; i++)
             {
+                MediaItem mediaItem = new MediaItem();
+                TPlotQuery tplotQuery = new TPlotQuery();
+                TSeasonQuery tSeasonQuery = new TSeasonQuery();
+
+                string imdbID = items[i].imdbID;
                 string titleSearch = items[i].Title;
-                string tPlotQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + apiKey;
-                TPlotQuery tplotQuery = (TPlotQuery)getResObject(tPlotQueryUrl, typeof(TPlotQuery));
+                string tPlotQueryUrl = dataApi + idKey + imdbID + fullPlotKey + apiKey;
+                tplotQuery = (TPlotQuery)getResObject(tPlotQueryUrl, typeof(TPlotQuery));
+
+                mediaItem.Title = tplotQuery.Title;
+                mediaItem.Released = tplotQuery.Released;
+                mediaItem.Type = tplotQuery.Type;
+                mediaItem.Poster = tplotQuery.Poster;
+                mediaItem.Plot = tplotQuery.Plot;
 
                 string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + "1" + apiKey;
-                TSeasonQuery tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
+                tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
+                mediaItem.Episodes = tSeasonQuery.Episodes;
+
+                mediaItems.Add(mediaItem);
             }
         }
 

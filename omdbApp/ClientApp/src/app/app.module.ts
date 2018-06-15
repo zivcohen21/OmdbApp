@@ -10,6 +10,11 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { SearchService } from './services/search.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+//import {
+//  MatToolbarModule,
+//  MatTableModule,
+//} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -23,6 +28,9 @@ import { SearchService } from './services/search.service';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    NgxPaginationModule,
+    //MatToolbarModule,
+    //MatTableModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
