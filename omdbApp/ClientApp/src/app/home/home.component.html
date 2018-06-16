@@ -1,77 +1,24 @@
-<h1>OMDB API SEARCH</h1>
-<form name="form" (ngSubmit)="f.form.valid && search()" #f="ngForm" novalidate>
+<h1>OMDB SEARCH</h1>
+<form class="form-inline" name="form" (ngSubmit)="f.form.valid && search()" #f="ngForm" novalidate>
   <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !search.valid }">
-    <label for="title">
-      Title
-      <input id="title" type="search" class="form-control" name="title" [(ngModel)]="model.title" required />
-    </label>
+    <label for="title"> Title </label>
+    <input id="title" type="search" class="form-control title-control" name="title" [(ngModel)]="model.title" required />   
   </div>
   <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !search.valid }">
-    <label for="year">
-      Year
-      <input id="year" type="number" class="form-control" name="search" [(ngModel)]="model.year" />
-    </label>
+    <label for="year"> Year  </label>
+    <input id="year" type="number" class="form-control year-control" name="search" [(ngModel)]="model.year" />
   </div>
   <div class="form-group">
-    <button [disabled]="loading" class="btn btn-primary">SEARCH</button>
+    <button [disabled]="loading" class="btn btn-primary">Search</button>
     <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
   </div>
 </form>
+<div>
+  <pagination-controls *ngIf="itemsList && itemsList.length > 0" (pageChange)="p = $event"></pagination-controls>
+</div>
 
-<pagination-controls *ngIf="itemsList && itemsList.length > 0" (pageChange)="p = $event"></pagination-controls>
 
-<!--<div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-    <!-- Position Column -->
-    <!--<ng-container matColumnDef="poster">
-      <mat-header-cell *matHeaderCellDef> Poster </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <div *ngIf="element.poster != 'N/A'">
-          <img width="100" height="100" src={{element.poster}}>
-        </div>
-      </mat-cell>
-    </ng-container>-->
-    <!-- Name Column -->
-    <!--<ng-container matColumnDef="title">
-      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <div *ngIf="element.title != 'N/A'">
-          {{element.title}}
-        </div>
-      </mat-cell>
-    </ng-container>-->
-    <!-- Weight Column -->
-    <!--<ng-container matColumnDef="released">
-      <mat-header-cell *matHeaderCellDef> Date Release </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <div *ngIf="element.released != 'N/A'">
-          {{element.released}}
-        </div>
-      </mat-cell>
-    </ng-container>-->
-    <!-- Expanded Content Column - The detail row is made up of this one column -->
-    <!--<ng-container *ngIf="isExpansionDetailRow" matColumnDef="expandedDetail">
-      <mat-cell *matCellDef="let detail">
-        The symbol forgfdgfdgfdgdfgdfgfdgfdgfdgfdgdfgfdgfdgdfgfdgfd
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"
-             matRipple
-             class="element-row"
-             [class.expanded]="expandedElement == row"
-             (click)="expandedElement = row">
-    </mat-row>-->
-    <!--<mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-             [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
-             style="overflow: hidden">
-    </mat-row>-->
-  <!--</mat-table>
-</div>-->
-
-<table class='table' *ngIf="itemsList && itemsList.length > 0">
+<table class='table table-hover' *ngIf="itemsList && itemsList.length > 0">
   <thead>
     <tr>
       <th>Poster</th>
@@ -135,6 +82,6 @@
   </tbody>
 </table>
 
-<p *ngIf="!start && (!itemsList || itemsList.length <=0)">
+<p class="message" *ngIf="!start && (!itemsList || itemsList.length <=0)">
   {{ response.message }}
 </p>

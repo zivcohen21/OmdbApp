@@ -1,0 +1,36 @@
+h1 {
+  text-align:center;
+  color: dodgerblue;
+  margin: 40px;
+}
+
+tr {
+  cursor: pointer;
+}
+
+.title-cell {
+  width: 40%;
+  padding: 20px;
+}
+
+.poster-cell {
+  width: 10%;
+}
+
+.form-inline {
+  text-align: center;
+}
+
+.title-control {
+  width: 80%;
+}
+
+.year-control {
+  width: 35%;
+}
+
+.message {
+  font-weight: bold;
+  margin: 30px;
+  text-align: center;
+}

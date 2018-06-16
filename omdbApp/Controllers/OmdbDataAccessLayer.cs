@@ -22,19 +22,6 @@ namespace omdbApp.Models
         private static string yearKey = "&y=";
         WebClient client = new WebClient();
 
-        //string Title 1 2 3 
-        //string Year 1 3
-        //string Type 1 3
-        //string Poster 1 3
-        //string Plot 1
-        //List<Episode> Episodes 2
-
-
-        // t plot: title year type poster plot (1) 
-        //t plot season:  title Episodes (1)
-        //s page: 10 each page: title year type poster
-
-
         public Results search(Search search)
         {
             string title = search.title;
@@ -117,9 +104,6 @@ namespace omdbApp.Models
                             TSeasonQuery tSeasonQuery = new TSeasonQuery();
                             string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + seasonIndex + apiKey;                            
                             tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
-                            //season.Title = tSeasonQuery.Title;
-                            //season.SeasonNumber = tSeasonQuery.Season;
-                            //season.Episodes = tSeasonQuery.Episodes;
                             seasons.Add(tSeasonQuery);
                         }
                         mediaItem.Seasons = seasons;
@@ -151,56 +135,6 @@ namespace omdbApp.Models
             {
                 return null;
             }    
-        }
-
-        //    string[] urls = getUrls(title);
-
-        //    string[] responseByString = new string[urls.Length];
-        //    SQuery[] responseData = new SQuery[urls.Length];
-
-        //    for (int i = 0; i < urls.Length; i++)
-        //    {
-        //        responseByString[i] = getResponseByString(urls[i]);
-        //        responseData[i] = getResponseByObject(responseByString[i]);
-        //    }
-
-        //    List<MediaItem> mediaItems = responseData[3].Search;
-        //    if (mediaItems != null)
-        //    {
-        //        int size = mediaItems.Count;
-
-        //        for (int i = 0; i < size; i++)
-        //        {
-        //            String title = mediaItems[i].Title;
-        //            getUrls(title);
-        //        }
-        //    }
-
-        //}
-
-        //public string getResponseByString(string url)
-        //{
-        //    string responseFromServer = client.DownloadString(url);
-        //    Console.WriteLine(responseFromServer);            
-        //    return responseFromServer;
-        //}
-
-        //public SQuery getResponseByObject(string response)
-        //{
-        //    SQuery responseData = JsonConvert.DeserializeObject<SQuery>(response);
-        //    return responseData;
-        //}
-
-        //public string[] getUrls(string title)
-        //{
-        //    string[] urls = 
-        //    {
-        //        dataApi + "t=" + title + "&plot=full" + apiKey,
-        //        dataApi + "t=" + title + "&plot=full" + "&Season=1" + apiKey,
-        //        dataApi + "s=" + title + "&Season=1" + apiKey
-        //    };           
-
-        //    return urls;
-        //}
+        }       
     }
 }
