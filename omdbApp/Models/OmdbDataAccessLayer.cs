@@ -19,7 +19,7 @@ namespace omdbApp.Models
         private static string pageKey = "&page=";
         private static string fullPlotKey = "&plot=full";
         private static string seasonKey = "&Season=";
-        private static string TypeKey = "&type=";
+        private static string yearKey = "&y=";
         WebClient client = new WebClient();
 
         //string Title 1 2 3 
@@ -35,29 +35,51 @@ namespace omdbApp.Models
         //s page: 10 each page: title year type poster
 
 
-        public List<MediaItem> search(Search search)
+        public Results search(Search search)
         {
-            string term = search.search;
-
+            string title = search.title;
+            string year = search.year;
+            Results results = new Results();
             List<MediaItem> mediaItems = new List<MediaItem>();
-            string sQueryUrl = dataApi + searchKey + term + apiKey;
-            SQuery sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
-
-            int numOfPages = (sQuery.totalResults / 10) + 1;
-            List<SQueryInner> items = sQuery.Search;
-            if (items != null)
+            string sQueryUrl = "";
+            if(year != null)
             {
-                getAllDataOfItemPerPage(items, mediaItems);
-
-                //for(int i = 2; i <= numOfPages; i++)
-                //{
-                //    sQueryUrl = dataApi + searchKey + term + pageKey + i + apiKey;
-                //    sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
-                //    items = sQuery.Search;
-                //    getAllDataOfItemPerPage(items, mediaItems);
-                //}
+                sQueryUrl = dataApi + searchKey + title + yearKey + year + apiKey;
             }
-            return mediaItems;
+            else
+            {
+                sQueryUrl = dataApi + searchKey + title + apiKey;
+            } 
+            SQuery sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
+            if (sQuery.Response == true)
+            {
+                int numOfPages = 0;
+                if (sQuery.totalResults != null && sQuery.totalResults != "N/A")
+                {
+                    numOfPages = (Int32.Parse(sQuery.totalResults) / 10) + 1;
+                }
+                
+                List<SQueryInner> items = sQuery.Search;
+                if (items != null)
+                {
+                    getAllDataOfItemPerPage(items, mediaItems);
+    
+                    for (int i = 2; i <= numOfPages; i++)
+                    {
+                        sQueryUrl = dataApi + searchKey + title + pageKey + i + apiKey;
+                        sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
+                        items = sQuery.Search;
+                        getAllDataOfItemPerPage(items, mediaItems);
+                    }
+                }
+            }
+            else
+            {
+                results.message = sQuery.Error;
+            }
+            results.MediaItems = mediaItems;
+            
+            return results;
         }
 
         private void getAllDataOfItemPerPage(List<SQueryInner> items, List<MediaItem> mediaItems)
@@ -66,7 +88,7 @@ namespace omdbApp.Models
             {
                 MediaItem mediaItem = new MediaItem();
                 TPlotQuery tplotQuery = new TPlotQuery();
-                TSeasonQuery tSeasonQuery = new TSeasonQuery();
+                
 
                 string imdbID = items[i].imdbID;
                 string titleSearch = items[i].Title;
@@ -78,12 +100,31 @@ namespace omdbApp.Models
                     mediaItem.Title = tplotQuery.Title;
                     mediaItem.Released = tplotQuery.Released;
                     mediaItem.Type = tplotQuery.Type;
+                    mediaItem.Genre = tplotQuery.Genre;
                     mediaItem.Poster = tplotQuery.Poster;
                     mediaItem.Plot = tplotQuery.Plot;
 
-                    string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + "1" + apiKey;
-                    tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
-                    mediaItem.Episodes = tSeasonQuery.Episodes;
+                    if(tplotQuery.Type == "series")
+                    {
+                        int numOfSeasons = 0;
+                        if (tplotQuery.totalSeasons != null && tplotQuery.totalSeasons != "N/A")
+                        {
+                            numOfSeasons = Int32.Parse(tplotQuery.totalSeasons);
+                        }                            
+                        List<TSeasonQuery> seasons = new List<TSeasonQuery>();
+                        for (int seasonIndex = 1; seasonIndex <= numOfSeasons; seasonIndex++)
+                        {
+                            TSeasonQuery tSeasonQuery = new TSeasonQuery();
+                            string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + seasonIndex + apiKey;                            
+                            tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
+                            //season.Title = tSeasonQuery.Title;
+                            //season.SeasonNumber = tSeasonQuery.Season;
+                            //season.Episodes = tSeasonQuery.Episodes;
+                            seasons.Add(tSeasonQuery);
+                        }
+                        mediaItem.Seasons = seasons;
+                    }
+                   
 
                     mediaItems.Add(mediaItem);
                 }
@@ -112,7 +153,7 @@ namespace omdbApp.Models
             }    
         }
 
-        //    string[] urls = getUrls(term);
+        //    string[] urls = getUrls(title);
 
         //    string[] responseByString = new string[urls.Length];
         //    SQuery[] responseData = new SQuery[urls.Length];
@@ -150,13 +191,13 @@ namespace omdbApp.Models
         //    return responseData;
         //}
 
-        //public string[] getUrls(string term)
+        //public string[] getUrls(string title)
         //{
         //    string[] urls = 
         //    {
-        //        dataApi + "t=" + term + "&plot=full" + apiKey,
-        //        dataApi + "t=" + term + "&plot=full" + "&Season=1" + apiKey,
-        //        dataApi + "s=" + term + "&Season=1" + apiKey
+        //        dataApi + "t=" + title + "&plot=full" + apiKey,
+        //        dataApi + "t=" + title + "&plot=full" + "&Season=1" + apiKey,
+        //        dataApi + "s=" + title + "&Season=1" + apiKey
         //    };           
 
         //    return urls;

@@ -26,15 +26,17 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\models\Episode.model.ts" />
-    <None Remove="ClientApp\src\app\models\mediaItems.model.ts" />
+    <None Remove="ClientApp\src\app\models\MediaItem.model.ts" />
     <None Remove="ClientApp\src\app\models\search.model.ts" />
+    <None Remove="ClientApp\src\app\models\Season.model.ts" />
     <None Remove="ClientApp\src\app\services\search.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\models\Episode.model.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\MediaItems.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\MediaItem.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\Search.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\Season.model.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\search.service.ts" />
   </ItemGroup>
 

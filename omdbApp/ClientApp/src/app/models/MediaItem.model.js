@@ -6,4 +6,4 @@ var MediaItem = /** @class */ (function () {
     return MediaItem;
 }());
 exports.MediaItem = MediaItem;
-//# sourceMappingURL=mediaItems.model.js.map
+//# sourceMappingURL=MediaItem.model.js.map

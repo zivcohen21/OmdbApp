@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace omdbApp.Models
 {
-    public class TSeasonQuery
+    public class Season
     {
         public string Title { get; set; }
-        public int Season { get; set; }
-        public List<Episode> Episodes { get; set; }        
+        public int SeasonNumber { get; set; }
+        public List<Episode> Episodes { get; set; }
     }
 }

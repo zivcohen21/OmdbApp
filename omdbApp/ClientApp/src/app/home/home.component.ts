@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService } from '../services/search.service';
-import { MediaItem } from '../models/MediaItems.model';
+import { MediaItem } from '../models/MediaItem.model';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -23,17 +23,12 @@ export class HomeComponent implements OnInit{
 
   model: any = {};
 
+  public response: { mediaItems: MediaItem[], message: string };
   public itemsList: MediaItem[] = [];
   p: number = 1;
   ipp: number = 10;
   public start: boolean = true;
   expanedItem: number = -1;
-
-  displayedColumns = ['poster', 'title', 'released'];
-  dataSource = new MatTableDataSource(this.itemsList);
-
-  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
-  expandedElement: any;
 
   constructor(private searchService: SearchService) { }
   
@@ -44,15 +39,13 @@ export class HomeComponent implements OnInit{
   search() {
     console.info(this.model);
     this.itemsList = [];
-    this.dataSource.data = this.itemsList;
     this.start = true;
     this.searchService.sendSearch(this.model)
       .subscribe(
       data => {
+        this.response = data;
         console.info(data);
-        this.itemsList = data;
-        this.dataSource.data = this.itemsList;
-        console.info(this.itemsList);
+        this.itemsList = data.mediaItems;
         this.start = false;
       }
       //error => {

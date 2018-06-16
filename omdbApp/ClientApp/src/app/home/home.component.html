@@ -1,7 +1,16 @@
 <h1>OMDB API SEARCH</h1>
 <form name="form" (ngSubmit)="f.form.valid && search()" #f="ngForm" novalidate>
   <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !search.valid }">
-    <input id="search" type="search" class="form-control" name="search" [(ngModel)]="model.search" required />
+    <label for="title">
+      Title
+      <input id="title" type="search" class="form-control" name="title" [(ngModel)]="model.title" required />
+    </label>
+  </div>
+  <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !search.valid }">
+    <label for="year">
+      Year
+      <input id="year" type="number" class="form-control" name="search" [(ngModel)]="model.year" />
+    </label>
   </div>
   <div class="form-group">
     <button [disabled]="loading" class="btn btn-primary">SEARCH</button>
@@ -68,37 +77,58 @@
       <th>Poster</th>
       <th>Title</th>
       <th>Release Date</th>
+      <th>Genre</th>
     </tr>
   </thead>
   <tbody>
     <tr class='line' *ngFor="let item of itemsList | paginate: { itemsPerPage: ipp, currentPage: p }" (click)="itemClicked(itemsList.indexOf(item))">
-      <td>
-        <div *ngIf="item.poster != 'N/A'">
+      <td class="poster-cell">
+        <div *ngIf="item.poster != 'N/A' && item.poster != null">
           <img width="100" height="100" src={{item.poster}}>
         </div>
       </td>
-      <td>
-        <div *ngIf="item.title != 'N/A'">
+      <td class="title-cell">
+        <div *ngIf="item.title != 'N/A' && item.title != null">
           {{ item.title }}
         </div>
         <br />
         <div *ngIf="itemsList.indexOf(item) == expanedItem">
-          <div *ngIf="item.type == 'movie'">
+          <div *ngIf="item.type == 'movie' && item.plot != 'N/A' && item.plot != null">
             {{ item.plot }}
           </div>
-          <div *ngIf="item.type == 'series'">
-            Episodes:
-            <ul *ngFor="let episode of item.episodes">
-              <li>
-                {{ episode.title }}- {{ episode.released }}
+          <div *ngIf="item.type == 'movie' && (item.plot == 'N/A' || item.plot == null)">
+            No Plot To Display.
+          </div>
+          <div *ngIf="item.type == 'series' && item.seasons != 'N/A' && item.seasons != null && item.seasons.length > 0">
+            <ul *ngFor="let season of item.seasons">
+              <li *ngIf="season.season != 'N/A' && season.season != null">
+                Season {{ season.season }}:
+                <div *ngIf="season.episodes != 'N/A' && season.episodes != null && season.episodes.length > 0" >
+                  <ul *ngFor="let episode of season.episodes">
+                    <li *ngIf="episode.title != 'N/A' && episode.title != null">
+                      {{ episode.title }}, {{ episode.released }}
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="item.type == 'series' && (season.episodes == 'N/A' || season.episodes == null || season.episodes.length <= 0)">
+                  No Episodes To Display.
+                </div>
               </li>
-            </ul>              
+            </ul>
+          </div>
+          <div *ngIf="item.type == 'series' && (item.seasons == 'N/A' || item.seasons == null || item.seasons.length <= 0)">
+            No Seasons To Display.
           </div>
         </div>
       </td>
       <td>
-        <div *ngIf="item.released != 'N/A'">
+        <div *ngIf="item.released != 'N/A' && item.released != null">
           {{ item.released }}
+        </div>
+      </td>
+      <td>
+        <div *ngIf="item.genre != 'N/A' && item.genre != null">
+          {{ item.genre }}
         </div>
       </td>
     </tr>
@@ -106,5 +136,5 @@
 </table>
 
 <p *ngIf="!start && (!itemsList || itemsList.length <=0)">
-  No Results
+  {{ response.message }}
 </p>

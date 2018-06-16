@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace omdbApp.Models
 {
-    public class Search
+    public class Results
     {
-        public string title { get; set; }
-        public string year { get; set; }
+        public List<MediaItem> MediaItems { get; set; }
+        public string message { get; set; }
     }
 }

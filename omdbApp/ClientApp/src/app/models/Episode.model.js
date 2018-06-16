@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var MediaItem = /** @class */ (function () {
-    function MediaItem() {
+var Episode = /** @class */ (function () {
+    function Episode() {
     }
-    return MediaItem;
+    return Episode;
 }());
-exports.MediaItem = MediaItem;
+exports.Episode = Episode;
 //# sourceMappingURL=Episode.model.js.map
