@@ -19,6 +19,7 @@ namespace omdbApp.Models
         private static string pageKey = "&page=";
         private static string fullPlotKey = "&plot=full";
         private static string seasonKey = "&Season=";
+        private static string TypeKey = "&type=";
         WebClient client = new WebClient();
 
         //string Title 1 2 3 
@@ -41,6 +42,7 @@ namespace omdbApp.Models
             List<MediaItem> mediaItems = new List<MediaItem>();
             string sQueryUrl = dataApi + searchKey + term + apiKey;
             SQuery sQuery = (SQuery)getResObject(sQueryUrl, typeof(SQuery));
+
             int numOfPages = (sQuery.totalResults / 10) + 1;
             List<SQueryInner> items = sQuery.Search;
             if (items != null)
@@ -71,17 +73,21 @@ namespace omdbApp.Models
                 string tPlotQueryUrl = dataApi + idKey + imdbID + fullPlotKey + apiKey;
                 tplotQuery = (TPlotQuery)getResObject(tPlotQueryUrl, typeof(TPlotQuery));
 
-                mediaItem.Title = tplotQuery.Title;
-                mediaItem.Released = tplotQuery.Released;
-                mediaItem.Type = tplotQuery.Type;
-                mediaItem.Poster = tplotQuery.Poster;
-                mediaItem.Plot = tplotQuery.Plot;
+                if(tplotQuery.Type == "movie" || tplotQuery.Type == "series")
+                {
+                    mediaItem.Title = tplotQuery.Title;
+                    mediaItem.Released = tplotQuery.Released;
+                    mediaItem.Type = tplotQuery.Type;
+                    mediaItem.Poster = tplotQuery.Poster;
+                    mediaItem.Plot = tplotQuery.Plot;
 
-                string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + "1" + apiKey;
-                tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
-                mediaItem.Episodes = tSeasonQuery.Episodes;
+                    string tSeasonQueryUrl = dataApi + titleKey + titleSearch + fullPlotKey + seasonKey + "1" + apiKey;
+                    tSeasonQuery = (TSeasonQuery)getResObject(tSeasonQueryUrl, typeof(TSeasonQuery));
+                    mediaItem.Episodes = tSeasonQuery.Episodes;
 
-                mediaItems.Add(mediaItem);
+                    mediaItems.Add(mediaItem);
+                }
+               
             }
         }
 

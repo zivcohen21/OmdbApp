@@ -11,10 +11,11 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { SearchService } from './services/search.service';
 import { NgxPaginationModule } from 'ngx-pagination';
-//import {
-//  MatToolbarModule,
-//  MatTableModule,
-//} from '@angular/material';
+import {
+  MatToolbarModule,
+  MatTableModule,
+} from '@angular/material';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,8 +30,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HttpClientModule,
     FormsModule,
     NgxPaginationModule,
-    //MatToolbarModule,
-    //MatTableModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatTableModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },

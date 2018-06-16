@@ -1,6 +1,7 @@
 import { Episode } from './Episode.model';
 
 export class MediaItem {
+  imdbID: string;
   title: string;
   released: string;
   type: string;

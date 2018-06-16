@@ -11,7 +11,56 @@
 
 <pagination-controls *ngIf="itemsList && itemsList.length > 0" (pageChange)="p = $event"></pagination-controls>
 
-
+<!--<div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+    <!-- Position Column -->
+    <!--<ng-container matColumnDef="poster">
+      <mat-header-cell *matHeaderCellDef> Poster </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="element.poster != 'N/A'">
+          <img width="100" height="100" src={{element.poster}}>
+        </div>
+      </mat-cell>
+    </ng-container>-->
+    <!-- Name Column -->
+    <!--<ng-container matColumnDef="title">
+      <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="element.title != 'N/A'">
+          {{element.title}}
+        </div>
+      </mat-cell>
+    </ng-container>-->
+    <!-- Weight Column -->
+    <!--<ng-container matColumnDef="released">
+      <mat-header-cell *matHeaderCellDef> Date Release </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="element.released != 'N/A'">
+          {{element.released}}
+        </div>
+      </mat-cell>
+    </ng-container>-->
+    <!-- Expanded Content Column - The detail row is made up of this one column -->
+    <!--<ng-container *ngIf="isExpansionDetailRow" matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let detail">
+        The symbol forgfdgfdgfdgdfgdfgfdgfdgfdgfdgdfgfdgfdgdfgfdgfd
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             matRipple
+             class="element-row"
+             [class.expanded]="expandedElement == row"
+             (click)="expandedElement = row">
+    </mat-row>-->
+    <!--<mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+             [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
+             style="overflow: hidden">
+    </mat-row>-->
+  <!--</mat-table>
+</div>-->
 
 <table class='table' *ngIf="itemsList && itemsList.length > 0">
   <thead>
@@ -22,7 +71,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of itemsList | paginate: { itemsPerPage: ipp, currentPage: p }">
+    <tr class='line' *ngFor="let item of itemsList | paginate: { itemsPerPage: ipp, currentPage: p }" (click)="itemClicked(itemsList.indexOf(item))">
       <td>
         <div *ngIf="item.poster != 'N/A'">
           <img width="100" height="100" src={{item.poster}}>
@@ -31,6 +80,20 @@
       <td>
         <div *ngIf="item.title != 'N/A'">
           {{ item.title }}
+        </div>
+        <br />
+        <div *ngIf="itemsList.indexOf(item) == expanedItem">
+          <div *ngIf="item.type == 'movie'">
+            {{ item.plot }}
+          </div>
+          <div *ngIf="item.type == 'series'">
+            Episodes:
+            <ul *ngFor="let episode of item.episodes">
+              <li>
+                {{ episode.title }}- {{ episode.released }}
+              </li>
+            </ul>              
+          </div>
         </div>
       </td>
       <td>
